@@ -5,8 +5,8 @@ const router = express.Router()
 
 const post = new Post()
 
-router.get('/', (req, res) => {
-    post.getPots(req, res)
+router.get('/:id', (req, res) => {
+    post.getPostsOfUser(req, res)
 })
 
 router.post('/add', (req, res) => {

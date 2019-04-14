@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const postSchema = new Schema({
     writerId:{
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'users',
+        required: true
     },
     description: {
         type: String,
@@ -25,7 +26,7 @@ const postSchema = new Schema({
         },
         commentUser: {
             type: Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'users'
         }
     }],
     date: {
@@ -34,6 +35,6 @@ const postSchema = new Schema({
     }
 })
 
-const modelClass = mongoose.model('posts', storySchema)
+const modelClass = mongoose.model('posts', postSchema)
 
 module.exports = modelClass

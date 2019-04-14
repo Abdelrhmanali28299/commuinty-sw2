@@ -1,15 +1,21 @@
+const mongoose = require('mongoose')
+const PostDB = require('./postDB')
+
 module.exports = class Post {
 
-    async getPots(req, res) {
-        res.status(200).json({
-            message: 'here we will show all posts'
-        })
+    async getPostsOfUser(req, res) {
+        PostDB
+            .find({writerId: req.parse.id})
+            .then((posts) => {
+                res.json(posts)
+            })
     }
 
     async addPost(req, res) {
-        let post = new Post({
+        let post = new PostDB({
+            writerId: req.body.id,
             description: req.body.body,
-            user: req.user.id
+            type: req.body.type
         })
         post
             .save()
@@ -17,5 +23,5 @@ module.exports = class Post {
                 res.json(data)
             })
     }
-    
+
 }
