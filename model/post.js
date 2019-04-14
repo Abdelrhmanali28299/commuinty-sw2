@@ -5,9 +5,12 @@ module.exports = class Post {
 
     async getPostsOfUser(req, res) {
         PostDB
-            .find({writerId: req.parse.id})
+            .find({writerId: req.params.id})
             .then((posts) => {
                 res.json(posts)
+            })
+            .catch(err => {
+                console.log(err)
             })
     }
 

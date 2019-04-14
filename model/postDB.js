@@ -3,8 +3,7 @@ const Schema = mongoose.Schema
 
 const postSchema = new Schema({
     writerId:{
-        type: Schema.Types.ObjectId,
-        ref: 'users',
+        type: String,
         required: true
     },
     description: {
@@ -25,8 +24,8 @@ const postSchema = new Schema({
             default: Date.now
         },
         commentUser: {
-            type: Schema.Types.ObjectId,
-            ref: 'users'
+            type: String,
+            required: true
         }
     }],
     date: {
