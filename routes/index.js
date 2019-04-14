@@ -1,25 +1,16 @@
 const express = require('express')
+const Post = require('../model/post')
 
 const router = express.Router()
 
+const post = new Post()
+
 router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'here we will show all posts'
-    })
+    post.getPots(req, res)
 })
 
 router.post('/add', (req, res) => {
-
-    let post = new Post({
-        description: req.body.body,
-        user: req.user.id
-    })
-    post
-        .save()
-        .then(data => {
-            res.json(data)
-        })
-
+    post.addPost(req, res)
 })
 
 module.exports = router
