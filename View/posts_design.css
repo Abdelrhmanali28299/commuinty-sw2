@@ -1,0 +1,9 @@
+#design{
+width: 100%;
+}
+input {
+    width: 750px;
+    height: 80px;
+    border-radius: 10px;
+
+  }
