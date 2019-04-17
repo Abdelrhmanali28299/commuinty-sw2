@@ -30,6 +30,21 @@ module.exports = class Post {
                 console.log(err)
             })
     }
+    
+    async getPost(req,res){
+        const id = req.params.id;
+        PostDB
+            .findById(id)
+            .exec()
+            .then(post=>{
+                res.json(post)
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json({
+                    error:err
+                })
+            })
+    }
 
     async addPost(req, res) {
         let post = new PostDB({
@@ -41,6 +56,20 @@ module.exports = class Post {
             .save()
             .then(data => {
                 res.json(data)
+            })
+    }
+    
+    async deletePost(req,res){
+        const ID = req.params.id;
+        PostDB
+            .deleteOne({ _id: ID })
+            .exec().then(post=>{
+                res.status(200).json(post)
+            })
+            .catch(err=>{
+                res.status(500).json({
+                    error:err
+                })
             })
     }
 
