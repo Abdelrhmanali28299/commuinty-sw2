@@ -1,12 +1,29 @@
 const mongoose = require('mongoose')
 const PostDB = require('./postDB')
+const UserDB = require('./userDB')
 
 module.exports = class Post {
 
+    async getHomePosts(req, res) {
+        UserDB
+            .find({ userId: req.params.id })
+            .then(user => {
+                let arr = [];
+                user.followers.forEach(followerId => {
+                    PostDB
+                        .find({ writerId: followerId})
+                        .then(posts => {
+                            arr.push(posts);
+                        })
+                });
+                res.json(arr);
+            })
+    }
+
     async getPostsOfUser(req, res) {
         PostDB
-            .find({writerId: req.params.id})
-            .then((posts) => {
+            .find({ writerId: req.params.id })
+            .then(posts => {
                 res.json(posts)
             })
             .catch(err => {

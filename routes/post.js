@@ -5,6 +5,10 @@ const router = express.Router()
 
 const post = new Post()
 
+router.get('/:id', (req, res) => {
+    post.getHomePosts(req, res);
+})
+
 router.get('/user/:id', (req, res) => {
     post.getPostsOfUser(req, res)
 })
