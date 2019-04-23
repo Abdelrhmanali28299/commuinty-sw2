@@ -1,9 +1,10 @@
 const express = require('express')
 const Post = require('../model/post')
-
+const PostDB = require('../model/postDB')
+const UserDB = require('../model/userDB')
 const router = express.Router()
 
-const post = new Post()
+const post = new Post(PostDB, UserDB)
 
 router.get('/home/:id', (req, res) => {
     post.getHomePosts(req, res);

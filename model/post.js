@@ -1,16 +1,18 @@
 const mongoose = require('mongoose')
-const PostDB = require('./postDB')
-const UserDB = require('./userDB')
 
 module.exports = class Post {
+    constructor(pDB, uDB) {
+        this.PostDB = pDB
+        this.UserDB = uDB
+    }
 
     async getHomePosts(req, res) {
-        UserDB
+        this.UserDB
             .find({ userId: req.params.id })
             .then(user => {
                 let arr = [];
                 user.followers.forEach(followerId => {
-                    PostDB
+                    this.PostDB
                         .find({ writerId: followerId, type: "Public"})
                         .then(posts => {
                             arr.push(posts);
@@ -21,7 +23,7 @@ module.exports = class Post {
     }
 
     async getPostsOfUser(req, res) {
-        PostDB
+        this.PostDB
             .find({ writerId: req.params.id })
             .then(posts => {
                 res.json(posts)
@@ -32,7 +34,7 @@ module.exports = class Post {
     }
     
     async getPost(req,res) {
-        PostDB
+        this.PostDB
             .findById(req.params.id)
             .exec()
             .then(post=>{
@@ -46,7 +48,7 @@ module.exports = class Post {
     }
 
     async addPost(req, res) {
-        let post = new PostDB({
+        let post = new this.PostDB({
             writerId: req.body.id,
             description: req.body.body,
             type: req.body.type
@@ -59,7 +61,7 @@ module.exports = class Post {
     }
 
     async editPost(req, res) {
-        PostDB
+        this.PostDB
             .findById(req.params.id)
             .exec()
             .then(post=>{
@@ -79,7 +81,7 @@ module.exports = class Post {
     }
 
     async deletePost(req,res) {
-        PostDB
+        this.PostDB
             .deleteOne({ _id: req.params.id })
             .exec().then(post=>{
                 res.status(200).json(post)
