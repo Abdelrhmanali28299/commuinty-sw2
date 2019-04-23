@@ -11,7 +11,7 @@ module.exports = class Post {
                 let arr = [];
                 user.followers.forEach(followerId => {
                     PostDB
-                        .find({ writerId: followerId})
+                        .find({ writerId: followerId, type: "Public"})
                         .then(posts => {
                             arr.push(posts);
                         })
@@ -31,10 +31,9 @@ module.exports = class Post {
             })
     }
     
-    async getPost(req,res){
-        const id = req.params.id;
+    async getPost(req,res) {
         PostDB
-            .findById(id)
+            .findById(req.params.id)
             .exec()
             .then(post=>{
                 res.json(post)
@@ -58,11 +57,30 @@ module.exports = class Post {
                 res.json(data)
             })
     }
-    
-    async deletePost(req,res){
-        const ID = req.params.id;
+
+    async editPost(req, res) {
         PostDB
-            .deleteOne({ _id: ID })
+            .findById(req.params.id)
+            .exec()
+            .then(post=>{
+                post.description = req.body.body
+                post.type = req.body.type
+                post
+                    .save()
+                    .then((newPost) => {
+                        res.json(newPost)
+                    })
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json({
+                    error:err
+                })
+            })
+    }
+
+    async deletePost(req,res) {
+        PostDB
+            .deleteOne({ _id: req.params.id })
             .exec().then(post=>{
                 res.status(200).json(post)
             })

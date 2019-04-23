@@ -21,6 +21,10 @@ router.post('/', (req, res) => {
     post.addPost(req, res)
 })
 
+router.put('/:id',(req,res)=>{
+    post.editPost(req,res)
+})
+
 router.delete('/:id',(req,res)=>{
     post.deletePost(req,res)
 })
