@@ -1,9 +1,10 @@
 const express = require('express')
 const Post = require('../model/post')
-
+const PostDB = require('../model/postDB')
+const UserDB = require('../model/userDB')
 const router = express.Router()
 
-const post = new Post()
+const post = new Post(PostDB, UserDB)
 
 router.get('/home/:id', (req, res) => {
     post.getHomePosts(req, res);
@@ -19,6 +20,10 @@ router.get('/:id',(req,res)=>{
 
 router.post('/', (req, res) => {
     post.addPost(req, res)
+})
+
+router.put('/:id',(req,res)=>{
+    post.editPost(req,res)
 })
 
 router.delete('/:id',(req,res)=>{
