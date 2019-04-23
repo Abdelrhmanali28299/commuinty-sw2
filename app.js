@@ -3,6 +3,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const post = require('./routes/post')
+const user = require('./routes/user')
 const keys = require('./config')
 
 const app = express()
@@ -23,6 +24,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/post', post)
+app.use('/user', user)
 
 const port = process.env.PORT || 5050
 
