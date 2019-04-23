@@ -8,7 +8,11 @@ module.exports = class Post {
     }
 
     async getFollwers(req, res) {
-        
+        this.UserDB
+            .findOne({userId: req.params.id})
+            .then((user => {
+                res.json(user.followers)
+            }))
     }
 
 }

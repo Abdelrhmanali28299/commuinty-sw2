@@ -8,7 +8,7 @@ const router = express.Router()
 const user = new User(UserDB, PostDB)
 
 router.get('/:id', (req, res) => {
-    user.getFollwers(req, res);
+    user.getFollwers(req, res)
 })
 
 module.exports = router
