@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
 
-module.exports = class Post {
+module.exports = class User {
 
-    constructor(uDB, pDB) {
+    constructor(uDB) {
         this.UserDB = uDB
-        this.PostDB = pDB
     }
 
     async getFollwers(req, res) {

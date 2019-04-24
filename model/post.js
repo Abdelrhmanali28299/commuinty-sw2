@@ -33,7 +33,7 @@ module.exports = class Post {
             })
     }
     
-    async getPost(req,res) {
+    async getPost(req, res) {
         this.PostDB
             .findById(req.params.id)
             .exec()
@@ -80,7 +80,7 @@ module.exports = class Post {
             })
     }
 
-    async deletePost(req,res) {
+    async deletePost(req, res) {
         this.PostDB
             .deleteOne({ _id: req.params.id })
             .exec().then(post=>{
@@ -90,6 +90,23 @@ module.exports = class Post {
                 res.status(500).json({
                     error:err
                 })
+            })
+    }
+
+    async addComment() {
+        this.PostDB
+            .findOne({ _id: req.params.id })
+            .then(post => {
+                let newComment = {
+                    commentBody: req.body.commentBody,
+                    commentUser: req.body.id
+                }
+                post.comments.unshift(newComment)
+                post
+                    .save()
+                    .then(post => {
+                        res.json(post)
+                    })
             })
     }
 
