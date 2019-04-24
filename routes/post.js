@@ -30,4 +30,8 @@ router.delete('/:id',(req,res)=>{
     post.deletePost(req,res)
 })
 
+router.post('/comment/:id',(req,res)=>{
+    post.addComment(req,res)
+})
+
 module.exports = router

@@ -93,4 +93,21 @@ module.exports = class Post {
             })
     }
 
+    async addComment() {
+        this.PostDB
+            .findOne({ _id: req.params.id })
+            .then(post => {
+                let newComment = {
+                    commentBody: req.body.commentBody,
+                    commentUser: req.body.id
+                }
+                post.comments.unshift(newComment)
+                post
+                    .save()
+                    .then(post => {
+                        res.json(post)
+                    })
+            })
+    }
+
 }
