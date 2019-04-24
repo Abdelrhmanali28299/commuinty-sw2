@@ -33,7 +33,7 @@ module.exports = class Post {
             })
     }
     
-    async getPost(req,res) {
+    async getPost(req, res) {
         this.PostDB
             .findById(req.params.id)
             .exec()
@@ -80,7 +80,7 @@ module.exports = class Post {
             })
     }
 
-    async deletePost(req,res) {
+    async deletePost(req, res) {
         this.PostDB
             .deleteOne({ _id: req.params.id })
             .exec().then(post=>{
