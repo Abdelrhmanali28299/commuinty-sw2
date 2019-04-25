@@ -27,4 +27,16 @@ module.exports = class User {
             })
     }
 
+    async addUser(req, res) {
+        let user = new this.UserDB({
+            userId: req.body.id,
+            followers: []
+        })
+        user
+            .save()
+            .then(user => {
+                res.json(user)
+            })
+    }
+
 }
