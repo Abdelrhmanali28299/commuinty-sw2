@@ -14,4 +14,29 @@ module.exports = class User {
             }))
     }
 
+    async addFollower(req, res) {
+        this.UserDB
+            .findOne({ userId: req.params.id })
+            .then(user => {
+                user.followers.push(req.body.followerId)
+                user
+                    .save()
+                    .then(user => {
+                        res.json(user)
+                    })
+            })
+    }
+
+    async addUser(req, res) {
+        let user = new this.UserDB({
+            userId: req.body.id,
+            followers: []
+        })
+        user
+            .save()
+            .then(user => {
+                res.json(user)
+            })
+    }
+
 }

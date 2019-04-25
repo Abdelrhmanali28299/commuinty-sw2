@@ -5,8 +5,16 @@ const router = express.Router()
 
 const user = new User(UserDB)
 
+router.post('/', (req, res) => {
+    user.addUser(req, res)
+})
+
 router.get('/:id', (req, res) => {
     user.getFollwers(req, res)
+})
+
+router.post('/follower/:id', (req, res) => {
+    user.addFollower(req, res)
 })
 
 module.exports = router
