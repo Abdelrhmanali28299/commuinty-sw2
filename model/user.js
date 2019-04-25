@@ -14,4 +14,17 @@ module.exports = class User {
             }))
     }
 
+    async addFollower(req, res) {
+        this.UserDB
+            .findOne({ userId: req.params.id })
+            .then(user => {
+                user.followers.push(req.body.followerId)
+                user
+                    .save()
+                    .then(user => {
+                        res.json(user)
+                    })
+            })
+    }
+
 }
