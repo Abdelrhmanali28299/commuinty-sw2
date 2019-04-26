@@ -26,6 +26,19 @@ module.exports = class User {
                     })
             })
     }
+    
+    async deleteFollower(req, res){
+        this.UserDB
+        .findOne({ userId: req.params.id })
+        .then(user => {
+            user.followers.pull(req.body.followerId)
+            user
+                .save()
+                .then(user => {
+                    res.json(user)
+                })
+        })
+    }
 
     async addUser(req, res) {
         let user = new this.UserDB({
