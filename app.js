@@ -2,6 +2,7 @@ const express = require("express")
 const path = require('path')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const post = require('./routes/post')
 const user = require('./routes/user')
 const keys = require('./config')
@@ -17,6 +18,8 @@ mongoose
   .catch(err => {
     console.log(err)
   })
+
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
