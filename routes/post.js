@@ -34,4 +34,8 @@ router.post('/comment/:id',(req,res)=>{
     post.addComment(req,res)
 })
 
+router.post('/upvote/:id',(req,res)=>{
+    post.addUpVote(req,res)
+})
+
 module.exports = router
