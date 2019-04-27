@@ -6,19 +6,38 @@ module.exports = class Post {
         this.UserDB = uDB
     }
 
+    async getPostForFollower(followerId) {
+        return await this.PostDB
+            .find({ writerId: followerId, type: "public" });
+    }
+
     async getHomePosts(req, res) {
         this.UserDB
-            .find({ userId: req.params.id })
-            .then(user => {
-                let arr = [];
-                user.followers.forEach(followerId => {
-                    this.PostDB
-                        .find({ writerId: followerId, type: "Public" })
-                        .then(posts => {
-                            arr.push(posts);
-                        })
-                });
-                res.json(arr);
+            .findOne({ userId: req.params.id })
+            .then(async user => {
+                let arr = []
+                for (let i = 0; i < user.followers.length; i++) {
+                    arr.push(...await this.getPostForFollower(user.followers[i]))
+                }
+                this.PostDB
+                    .find()
+                    .then(posts => {
+                        for (let i = 0; i < posts.length; i++) {
+                            let x = 0
+                            for (let v = 0; v < arr.length; v++) {
+                                if(posts[i].id == arr[v].id) {
+                                    x = 0;
+                                    break
+                                } else {
+                                    x = 1
+                                }
+                            }
+                            if(x == 1) {
+                                arr.push(posts[i])
+                            }
+                        }
+                        res.json(arr)
+                    })
             })
     }
 
@@ -93,7 +112,7 @@ module.exports = class Post {
             })
     }
 
-    async addComment() {
+    async addComment(req, res) {
         this.PostDB
             .findOne({ _id: req.params.id })
             .then(post => {
@@ -110,18 +129,18 @@ module.exports = class Post {
             })
     }
 
-    async addUpVote() {
+    async addUpVote(req, res) {
         this.PostDB
             .findOne({ _id: req.params.id })
             .then(post => {
-                if(post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) == -1){
+                if (post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) == -1) {
                     post.upVote.unshift(req.body.id)
                     post
                         .save()
                         .then(post => {
                             res.json(post)
                         })
-                } else if(post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) != -1) {
+                } else if (post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) != -1) {
                     post.downVote.splice(post.downVote.indexOf(req.body.id), 1)
                     post
                         .save()
