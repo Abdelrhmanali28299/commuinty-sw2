@@ -28,6 +28,16 @@ const postSchema = new Schema({
             required: true
         }
     }],
+    upVote:[
+        {
+            type: String
+        }
+    ],
+    downVote:[
+        {
+            type: String
+        }
+    ],
     date: {
         type: Date,
         default: Date.now
