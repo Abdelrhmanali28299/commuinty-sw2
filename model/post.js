@@ -13,7 +13,7 @@ module.exports = class Post {
                 let arr = [];
                 user.followers.forEach(followerId => {
                     this.PostDB
-                        .find({ writerId: followerId, type: "Public"})
+                        .find({ writerId: followerId, type: "Public" })
                         .then(posts => {
                             arr.push(posts);
                         })
@@ -32,17 +32,17 @@ module.exports = class Post {
                 console.log(err)
             })
     }
-    
+
     async getPost(req, res) {
         this.PostDB
             .findById(req.params.id)
             .exec()
-            .then(post=>{
+            .then(post => {
                 res.json(post)
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err)
                 res.status(500).json({
-                    error:err
+                    error: err
                 })
             })
     }
@@ -64,7 +64,7 @@ module.exports = class Post {
         this.PostDB
             .findById(req.params.id)
             .exec()
-            .then(post=>{
+            .then(post => {
                 post.description = req.body.body
                 post.type = req.body.type
                 post
@@ -72,10 +72,10 @@ module.exports = class Post {
                     .then((newPost) => {
                         res.json(newPost)
                     })
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err)
                 res.status(500).json({
-                    error:err
+                    error: err
                 })
             })
     }
@@ -83,12 +83,12 @@ module.exports = class Post {
     async deletePost(req, res) {
         this.PostDB
             .deleteOne({ _id: req.params.id })
-            .exec().then(post=>{
+            .exec().then(post => {
                 res.status(200).json(post)
             })
-            .catch(err=>{
+            .catch(err => {
                 res.status(500).json({
-                    error:err
+                    error: err
                 })
             })
     }
@@ -107,6 +107,35 @@ module.exports = class Post {
                     .then(post => {
                         res.json(post)
                     })
+            })
+    }
+
+    async addUpVote() {
+        this.PostDB
+            .findOne({ _id: req.params.id })
+            .then(post => {
+                if(post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) == -1){
+                    post.upVote.unshift(req.body.id)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                } else if(post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) != -1) {
+                    post.downVote.splice(post.downVote.indexOf(req.body.id), 1)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                } else {
+                    post.upVote.splice(post.upVote.indexOf(req.body.id), 1)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                }
             })
     }
 
