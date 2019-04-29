@@ -38,4 +38,8 @@ router.post('/upvote/:id', (req, res) => {
     post.addUpVote(req, res)
 })
 
+router.post('/downvote/:id', (req, res) => {
+    post.addDownVote(req, res)
+})
+
 module.exports = router
