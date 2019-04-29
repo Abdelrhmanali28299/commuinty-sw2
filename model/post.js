@@ -11,11 +11,11 @@ module.exports = class Post {
             .find({ writerId: followerId, type: "public" })
     }
 
-    async getHomePosts(req, res) {
-        this.UserDB
-            .findOne({ userId: req.params.id })
+    async getHomePosts(id) {
+        return await this.UserDB
+            .findOne({ userId: id })
             .then(async user => {
-                let arr = []
+                var arr = []
                 for (let i = 0; i < user.followers.length; i++) {
                     arr.push(...await this.getPostForFollower(user.followers[i]))
                 }
@@ -36,154 +36,188 @@ module.exports = class Post {
                                 arr.push(posts[i])
                             }
                         }
-                        res.json(arr)
+                        return arr
                     })
+                    .catch(err => {
+                        return {"error": err}
+                    })
+                return arr
+            })
+            .catch(err => {
+                return {"error": err}
             })
     }
 
-    async getPostsOfUser(req, res) {
-        this.PostDB
-            .find({ writerId: req.params.id })
+    async getPostsOfUser(id) {
+        return this.PostDB
+            .find({ writerId: id })
             .then(posts => {
-                res.json(posts)
+                return posts
             })
             .catch(err => {
-                console.log(err)
+                return {"error": err}
             })
     }
 
-    async getPost(req, res) {
-        this.PostDB
-            .findById(req.params.id)
+    async getPost(id) {
+        return this.PostDB
+            .findById(id)
             .exec()
             .then(post => {
-                res.json(post)
+                return post
             }).catch(err => {
-                console.log(err)
-                res.status(500).json({
-                    error: err
-                })
+                return {"error": err}
             })
     }
 
-    async addPost(req, res) {
+    async addPost(body) {
         let post = new this.PostDB({
-            writerId: req.body.id,
-            description: req.body.body,
-            type: req.body.type
+            writerId: body.id,
+            description: body.body,
+            type: body.type
         })
-        post
+        return post
             .save()
-            .then(data => {
-                res.json(data)
-            })
-    }
-
-    async editPost(req, res) {
-        this.PostDB
-            .findById(req.params.id)
-            .exec()
-            .then(post => {
-                post.description = req.body.body
-                post.type = req.body.type
-                post
-                    .save()
-                    .then((newPost) => {
-                        res.json(newPost)
-                    })
-            }).catch(err => {
-                console.log(err)
-                res.status(500).json({
-                    error: err
-                })
-            })
-    }
-
-    async deletePost(req, res) {
-        this.PostDB
-            .deleteOne({ _id: req.params.id })
-            .exec().then(post => {
-                res.status(200).json(post)
+            .then(newPost => {
+                return newPost
             })
             .catch(err => {
-                res.status(500).json({
-                    error: err
-                })
+                return {"error": err}
             })
     }
 
-    async addComment(req, res) {
-        this.PostDB
-            .findOne({ _id: req.params.id })
+    async editPost(id, body) {
+        return this.PostDB
+            .findById(id)
+            .exec()
+            .then(post => {
+                var newPost
+                post.description = body.body
+                post.type = body.type
+                post.save()
+                return post
+            }).catch(err => {
+                return {"error": err}
+            })
+    }
+
+    async deletePost(id) {
+        return this.PostDB
+            .deleteOne({ _id: id })
+            .exec()
+            .then(deleted => {
+                return deleted
+            })
+            .catch(err => {
+                return {"error": err}
+            })
+    }
+
+    async addComment(id, body) {
+        return this.PostDB
+            .findOne({ _id: id })
             .then(post => {
                 let newComment = {
-                    commentBody: req.body.commentBody,
-                    commentUser: req.body.id
+                    commentBody: body.commentBody,
+                    commentUser: body.id
                 }
                 post.comments.unshift(newComment)
                 post
                     .save()
-                    .then(post => {
-                        res.json(post)
+                    .then(newPost => {
+                        return newPost
                     })
+                    .catch(err => {
+                        return {"error": err}
+                    })
+                return post
+            })
+            .catch(err => {
+                return {"error": err}
             })
     }
 
-    async addUpVote(req, res) {
-        this.PostDB
-            .findOne({ _id: req.params.id })
+    async addUpVote(id, body) {
+        return this.PostDB
+            .findOne({ _id: id })
             .then(post => {
-                if (post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) == -1) {
-                    post.upVote.unshift(req.body.id)
+                if (post.upVote.indexOf(body.id) == -1 && post.downVote.indexOf(body.id) == -1) {
+                    post.upVote.unshift(body.id)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
                         })
-                } else if (post.upVote.indexOf(req.body.id) == -1 && post.downVote.indexOf(req.body.id) != -1) {
-                    post.downVote.splice(post.downVote.indexOf(req.body.id), 1)
+                        .catch(err => {
+                            return {"error": err}
+                        })
+                } else if (post.upVote.indexOf(body.id) == -1 && post.downVote.indexOf(body.id) != -1) {
+                    post.downVote.splice(post.downVote.indexOf(body.id), 1)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
+                        })
+                        .catch(err => {
+                            return {"error": err}
                         })
                 } else {
-                    post.upVote.splice(post.upVote.indexOf(req.body.id), 1)
+                    post.upVote.splice(post.upVote.indexOf(body.id), 1)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
+                        })
+                        .catch(err => {
+                            return {"error": err}
                         })
                 }
+                return post
+            })
+            .catch(err => {
+                return {"error": err}
             })
     }
 
-    async addDownVote(req, res) {
-        this.PostDB
-            .findOne({ _id: req.params.id })
+    async addDownVote(id, body) {
+        return this.PostDB
+            .findOne({ _id: id })
             .then(post => {
-                if (post.downVote.indexOf(req.body.id) == -1 && post.upVote.indexOf(req.body.id) == -1) {
-                    post.downVote.unshift(req.body.id)
+                if (post.downVote.indexOf(body.id) == -1 && post.upVote.indexOf(body.id) == -1) {
+                    post.downVote.unshift(body.id)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
                         })
-                } else if (post.downVote.indexOf(req.body.id) == -1 && post.upVote.indexOf(req.body.id) != -1) {
-                    post.upVote.splice(post.upVote.indexOf(req.body.id), 1)
+                        .catch(err => {
+                            return {"error": err}
+                        })
+                } else if (post.downVote.indexOf(body.id) == -1 && post.upVote.indexOf(body.id) != -1) {
+                    post.upVote.splice(post.upVote.indexOf(body.id), 1)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
+                        })
+                        .catch(err => {
+                            return {"error": err}
                         })
                 } else {
-                    post.downVote.splice(post.downVote.indexOf(req.body.id), 1)
+                    post.downVote.splice(post.downVote.indexOf(body.id), 1)
                     post
                         .save()
                         .then(post => {
-                            res.json(post)
+                            return post
+                        })
+                        .catch(err => {
+                            return {"error": err}
                         })
                 }
+                return post
+            })
+            .catch(err => {
+                return {"error": err}
             })
     }
 

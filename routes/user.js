@@ -5,20 +5,24 @@ const router = express.Router()
 
 const user = new User(UserDB)
 
-router.post('/', (req, res) => {
-    user.addUser(req, res)
+router.post('/', async (req, res) => {
+    let users = await user.addUser(req.body)
+    res.json(users)
 })
 
-router.get('/:id', (req, res) => {
-    user.getFollwers(req, res)
+router.get('/:id', async (req, res) => {
+    let users = await user.getFollwers(req.params.id)
+    res.json(users)
 })
 
-router.post('/follower/:id', (req, res) => {
-    user.addFollower(req, res)
+router.post('/follower/:id', async (req, res) => {
+    let users = await user.addFollower(req.params.id, req.body)
+    res.json(users)
 })
 
-router.delete('/follower/:id', (req, res) => {
-    user.deleteFollower(req, res)
+router.delete('/follower/:id', async (req, res) => {
+    let users = await user.deleteFollower(req.params.id, req.body)
+    res.json(users)
 })
 
 module.exports = router
