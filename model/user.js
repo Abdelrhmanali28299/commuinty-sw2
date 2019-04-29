@@ -6,49 +6,67 @@ module.exports = class User {
         this.UserDB = uDB
     }
 
-    async getFollwers(req, res) {
-        this.UserDB
-            .findOne({ userId: req.params.id })
-            .then((user => {
-                res.json(user.followers)
-            }))
-    }
-
-    async addFollower(req, res) {
-        this.UserDB
-            .findOne({ userId: req.params.id })
-            .then(user => {
-                user.followers.push(req.body.followerId)
-                user
-                    .save()
-                    .then(user => {
-                        res.json(user)
-                    })
-            })
-    }
-
-    async deleteFollower(req, res) {
-        this.UserDB
-            .findOne({ userId: req.params.id })
-            .then(user => {
-                user.followers.pull(req.body.followerId)
-                user
-                    .save()
-                    .then(user => {
-                        res.json(user)
-                    })
-            })
-    }
-
-    async addUser(req, res) {
+    async addUser(body) {
         let user = new this.UserDB({
-            userId: req.body.id,
+            userId: body.id,
             followers: []
         })
-        user
+        return user
             .save()
             .then(user => {
-                res.json(user)
+                return user
+            })
+            .catch(err => {
+                return {"error": err}
+            })
+    }
+
+    async getFollwers(id) {
+        return this.UserDB
+            .findOne({ userId: id })
+            .then((user => {
+                return user
+            }))
+            .catch(err => {
+                return {"error": err}
+            })
+    }
+
+    async addFollower(id, body) {
+        return this.UserDB
+            .findOne({ userId: id })
+            .then(user => {
+                user.followers.push(body.followerId)
+                return user
+                    .save()
+                    .then(user => {
+                        return user
+                    })
+                    .catch(err => {
+                        return {"error": err}
+                    })
+            })
+            .catch(err => {
+                return {"error": err}
+            })
+    }
+
+    async deleteFollower(id, body) {
+        return this.UserDB
+            .findOne({userId: id})
+            .then(user => {
+                user.followers.pull(body.followerId)
+                return user
+                    .save()
+                    .then(user => {
+                        return user
+                    })
+                    .catch(err => {
+                        return {"error": err}
+                    })
+            })
+            .catch(err => {
+                return {"error": err}
             })
     }
 

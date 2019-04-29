@@ -2,44 +2,54 @@ const express = require('express')
 const Post = require('../model/post')
 const PostDB = require('../model/postDB')
 const UserDB = require('../model/userDB')
+
 const router = express.Router()
 
 const post = new Post(PostDB, UserDB)
 
-router.get('/home/:id', (req, res) => {
-    post.getHomePosts(req, res)
+router.get('/home/:id', async (req, res) => {
+    let posts = await post.getHomePosts(req.params.id)
+    res.json(posts)
 })
 
-router.get('/user/:id', (req, res) => {
-    post.getPostsOfUser(req, res)
+router.get('/user/:id', async (req, res) => {
+    let posts = await post.getPostsOfUser(req.params.id)
+    res.json(posts)
 })
 
-router.get('/:id', (req, res) => {
-    post.getPost(req, res)
+router.get('/:id', async (req, res) => {
+    let posts = await post.getPost(req.params.id)
+    res.json(posts)
 })
 
-router.post('/', (req, res) => {
-    post.addPost(req, res)
+router.post('/', async (req, res) => {
+    let posts = await post.addPost(req.body)
+    res.json(posts)
 })
 
-router.put('/:id', (req, res) => {
-    post.editPost(req, res)
+router.put('/:id', async (req, res) => {
+    let posts = await post.editPost(req.params.id, req.body)
+    res.json(posts)
 })
 
-router.delete('/:id', (req, res) => {
-    post.deletePost(req, res)
+router.delete('/:id', async (req, res) => {
+    let posts = await post.deletePost(req.params.id)
+    res.json(posts)
 })
 
-router.post('/comment/:id', (req, res) => {
-    post.addComment(req, res)
+router.post('/comment/:id', async (req, res) => {
+    let posts = await post.addComment(req.params.id, req.body)
+    res.json(posts)
 })
 
-router.post('/upvote/:id', (req, res) => {
-    post.addUpVote(req, res)
+router.post('/upvote/:id', async (req, res) => {
+    let posts = await post.addUpVote(req.params.id, req.body)
+    res.json(posts)
 })
 
-router.post('/downvote/:id', (req, res) => {
-    post.addDownVote(req, res)
+router.post('/downvote/:id', async (req, res) => {
+    let posts = await post.addDownVote(req.params.id, req.body)
+    res.json(posts)
 })
 
 module.exports = router
