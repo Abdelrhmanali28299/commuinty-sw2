@@ -157,5 +157,34 @@ module.exports = class Post {
                 }
             })
     }
+    
+    async addDownVote(req, res) {
+        this.PostDB
+            .findOne({ _id: req.params.id })
+            .then(post => {
+                if (post.downVote.indexOf(req.body.id) == -1 && post.upVote.indexOf(req.body.id) == -1) {
+                    post.downVote.unshift(req.body.id)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                } else if (post.downVote.indexOf(req.body.id) == -1 && post.upVote.indexOf(req.body.id) != -1) {
+                    post.upVote.splice(post.upVote.indexOf(req.body.id), 1)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                } else {
+                    post.downVote.splice(post.downVote.indexOf(req.body.id), 1)
+                    post
+                        .save()
+                        .then(post => {
+                            res.json(post)
+                        })
+                }
+            })
+    }
 
 }
