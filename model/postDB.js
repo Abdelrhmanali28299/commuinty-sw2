@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const postSchema = new Schema({
-    writerId:{
+    writerId: {
         type: String,
         required: true
     },
@@ -28,12 +28,12 @@ const postSchema = new Schema({
             required: true
         }
     }],
-    upVote:[
+    upVote: [
         {
             type: String
         }
     ],
-    downVote:[
+    downVote: [
         {
             type: String
         }

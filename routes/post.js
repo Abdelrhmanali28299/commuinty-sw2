@@ -7,7 +7,7 @@ const router = express.Router()
 const post = new Post(PostDB, UserDB)
 
 router.get('/home/:id', (req, res) => {
-    post.getHomePosts(req, res);
+    post.getHomePosts(req, res)
 })
 
 router.get('/user/:id', (req, res) => {

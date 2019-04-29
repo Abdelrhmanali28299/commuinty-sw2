@@ -17,7 +17,7 @@ router.post('/follower/:id', (req, res) => {
     user.addFollower(req, res)
 })
 
-router.delete('/follower/:id',(req,res)=>{
+router.delete('/follower/:id', (req, res) => {
     user.deleteFollower(req, res)
 })
 

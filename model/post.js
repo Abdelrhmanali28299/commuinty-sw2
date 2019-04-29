@@ -8,7 +8,7 @@ module.exports = class Post {
 
     async getPostForFollower(followerId) {
         return await this.PostDB
-            .find({ writerId: followerId, type: "public" });
+            .find({ writerId: followerId, type: "public" })
     }
 
     async getHomePosts(req, res) {
@@ -25,14 +25,14 @@ module.exports = class Post {
                         for (let i = 0; i < posts.length; i++) {
                             let x = 0
                             for (let v = 0; v < arr.length; v++) {
-                                if(posts[i].id == arr[v].id) {
-                                    x = 0;
+                                if (posts[i].id == arr[v].id) {
+                                    x = 0
                                     break
                                 } else {
                                     x = 1
                                 }
                             }
-                            if(x == 1) {
+                            if (x == 1) {
                                 arr.push(posts[i])
                             }
                         }
@@ -157,7 +157,7 @@ module.exports = class Post {
                 }
             })
     }
-    
+
     async addDownVote(req, res) {
         this.PostDB
             .findOne({ _id: req.params.id })

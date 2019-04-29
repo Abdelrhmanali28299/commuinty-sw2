@@ -8,7 +8,7 @@ module.exports = class User {
 
     async getFollwers(req, res) {
         this.UserDB
-            .findOne({userId: req.params.id})
+            .findOne({ userId: req.params.id })
             .then((user => {
                 res.json(user.followers)
             }))
@@ -26,18 +26,18 @@ module.exports = class User {
                     })
             })
     }
-    
-    async deleteFollower(req, res){
+
+    async deleteFollower(req, res) {
         this.UserDB
-        .findOne({ userId: req.params.id })
-        .then(user => {
-            user.followers.pull(req.body.followerId)
-            user
-                .save()
-                .then(user => {
-                    res.json(user)
-                })
-        })
+            .findOne({ userId: req.params.id })
+            .then(user => {
+                user.followers.pull(req.body.followerId)
+                user
+                    .save()
+                    .then(user => {
+                        res.json(user)
+                    })
+            })
     }
 
     async addUser(req, res) {

@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    userId:{
+    userId: {
         type: String,
         required: true
     },
-    followers:[
+    followers: [
         {
             type: String
         }
