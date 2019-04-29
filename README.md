@@ -3,14 +3,7 @@ we make a community api
 
 ## Features
 
-# GET/ 
-  ### http://localhost:5050/post/user/5
-  ```js
-// Get all posts of user that has ID 5
-fetch(' http://localhost:5050/post/user/5')
-  .then(response => response.json())
-  .then(json => console.log(json))
-```
+
 ## GET/ 
 ### http://localhost:5050/post/user/5
   ```js
