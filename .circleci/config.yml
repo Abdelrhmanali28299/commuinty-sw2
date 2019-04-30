@@ -18,6 +18,9 @@ jobs:
 
       - run: yarn install
 
+      - setup_remote_docker:
+          docker_layer_caching: true
+
       - save_cache:
           paths:
             - node_modules
@@ -25,3 +28,13 @@ jobs:
 
       # run tests!
       - run: yarn test
+    
+      # docker login
+      - run: |
+          docker login -u abdelrhmanali -p Abdo282990ali
+
+      # build docker image
+      - run: docker build -t abdelrhmanali/commuinty-sw2 .
+
+      # push docker image
+      - run: docker push abdelrhmanali/commuinty-sw2
