@@ -31,7 +31,7 @@ jobs:
     
       # docker login
       - run: |
-          docker login -u abdelrhmanali -p Abdo282990ali
+          docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
 
       # build docker image
       - run: docker build -t abdelrhmanali/commuinty-sw2 .
