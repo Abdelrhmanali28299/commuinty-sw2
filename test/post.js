@@ -40,3 +40,17 @@ describe("GET by id endpoints test", () => {
     })
 
 })
+
+describe("put endpoints test", () => {
+    it("edit post endpoint", async () => {
+        let id = "5cc9c0018f7b173110c3009d"
+        let body = {
+            "id": "123456",
+            "body": "lolol7",
+            "type": "public"
+        }
+        let posts = await post.editPost(id, body)
+        assert(posts.id === "5cc9c0018f7b173110c3009d")
+    })
+
+})
