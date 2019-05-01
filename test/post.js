@@ -78,3 +78,14 @@ describe("add downvote  endpoints test", () => {
     })
 
 })
+
+describe("done the test", () => {
+    it('should complete this test', function () {
+        return new Promise(function (resolve) {
+            assert.ok(true);
+            resolve();
+            done();
+        });
+        
+    })
+})
