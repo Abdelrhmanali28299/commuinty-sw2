@@ -15,3 +15,12 @@ describe("Post endpoints test", () => {
     })
 
 })
+
+describe("GET endpoints test", () => {
+    it("get post endpoint", async () => {
+        let id = "5cc9c0018f7b173110c3009d"
+        let posts = await post.getPost(id)
+        assert(posts.id === "5cc9c0018f7b173110c3009d")
+    })
+
+})
