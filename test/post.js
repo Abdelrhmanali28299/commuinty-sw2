@@ -54,3 +54,15 @@ describe("put endpoints test", () => {
     })
 
 })
+
+describe("add upVote  endpoints test", () => {
+    it("upvote post endpoint", async () => {
+        let id = "5cc9c0018f7b173110c3009d"
+        let body = {
+            "id": "1"
+        }
+        let posts = await post.addUpVote(id, body)
+        assert(posts.id === "5cc9c0018f7b173110c3009d")
+    })
+
+})
